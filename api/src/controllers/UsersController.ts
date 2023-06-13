@@ -24,12 +24,30 @@ class UsersController {
     } catch (error) {
       next(error);
     }
-
-
   }
 
-  auth() {
+  async update(request: Request, response: Response, next: NextFunction) {
+    const { name, oldPassword, newPassword } = request.body;
+    const { user_id } = request;
 
+    try {
+      const result = await this.usersService.update({ name, oldPassword, newPassword, avatar_url: request.file?.path, user_id });
+      return response.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async auth(request: Request, response: Response, next: NextFunction) {
+    const { email, password } = request.body;
+
+    try {
+      const result = await this.usersService.auth(email, password)
+      return response.json(result);
+
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
