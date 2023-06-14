@@ -26,7 +26,7 @@ export function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({ resolver: yupResolver(schema) })
 
   const submit = handleSubmit(async (data) => {
-    const result = await api.post('/users', {
+    const result = await api.post('users/', {
       name: data.name,
       email: data.email,
       password: data.password

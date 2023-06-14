@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import logo from '../../assets/logo.webp';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
+import { api } from '../../server';
 import style from './login.module.css';
 
 interface IFormValues {
@@ -24,8 +25,11 @@ export function Login() {
   })
   const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({ resolver: yupResolver(schema) })
 
-  const submit = handleSubmit((data) => {
-    console.log(data)
+  const submit = handleSubmit(async ({ email, password }) => {
+    const result = await api.post('/auth', {
+      email,
+      password
+    });
   })
   return (
     <div className={style.background}>
