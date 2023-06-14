@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import logo from '../../assets/logo.webp';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
-import { api } from '../../server';
+import { useAuth } from '../../hooks/auth';
 import style from './login.module.css';
 
 interface IFormValues {
@@ -17,6 +17,7 @@ interface IFormValues {
 }
 
 export function Login() {
+  const { signIn } = useAuth();
   const schema = yup.object().shape({
 
     email: yup.string().email('Digite um e-mail válido').required('Campo de email obrigatório'),
@@ -26,10 +27,14 @@ export function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({ resolver: yupResolver(schema) })
 
   const submit = handleSubmit(async ({ email, password }) => {
-    const result = await api.post('/auth', {
-      email,
-      password
-    });
+    try {
+      signIn({ email, password });
+    } catch (error) {
+      console.log(error)
+    }
+
+
+
   })
   return (
     <div className={style.background}>

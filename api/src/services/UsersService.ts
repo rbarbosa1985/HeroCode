@@ -22,7 +22,6 @@ class UsersService {
   }
 
   async update({ name, oldPassword, newPassword, avatar_url, user_id }: IUpdate) {
-    let hashPassword
     if (oldPassword && newPassword) {
       const findUser = await this.usersRepository.findUserById(user_id);
 
@@ -83,7 +82,7 @@ class UsersService {
     if (!findUser) {
       throw new Error('User or password invalid.')
     }
-    const passwordMatch = compare(password, findUser.password);
+    const passwordMatch = await compare(password, findUser.password);
 
     if (!passwordMatch) {
       throw new Error('User or password invalid.')
@@ -118,3 +117,4 @@ class UsersService {
 }
 
 export { UsersService };
+

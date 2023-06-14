@@ -1,0 +1,21 @@
+.dataTitle {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+  color: var(--black);
+}
+
+.schedule {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.cardWrapper {
+  width: 50%;
+  padding: 0 1rem;
+}
+
+.picker {
+  width: 50%;
+}
