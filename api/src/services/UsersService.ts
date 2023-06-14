@@ -1,5 +1,5 @@
 import { compare, hash } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { ICreate, IUpdate } from "../interfaces/UsersInterface";
 import { UsersRepository } from "../repositories/UsersRepository";
 
@@ -53,9 +53,31 @@ class UsersService {
 
   }
 
-  async auth(email: string, password: string) {
+  async refresh(refresh_token: string) {
 
-    console.log("Email:" + email);
+    if (!refresh_token) {
+      throw new Error('Refresh token  missing.')
+    }
+
+    let secretKey: string | undefined = process.env.ACCESS_KEY_TOKEN
+
+    if (!secretKey) {
+      throw new Error('There is no token key')
+    }
+
+    const verifyRefreshToken = verify(refresh_token, secretKey)
+
+    const { sub } = verifyRefreshToken;
+
+    const newToken = sign({ sub }, secretKey, {
+      expiresIn: 60 * 15,
+    })
+
+    return { token: newToken };
+
+  }
+
+  async auth(email: string, password: string) {
 
     const findUser = await this.usersRepository.findUserByEmail(email);
     if (!findUser) {
@@ -78,8 +100,14 @@ class UsersService {
       expiresIn: 60 * 15,
     })
 
+    const refreshToken = sign({ email }, secretKey, {
+      subject: findUser.id,
+      expiresIn: '7d',
+    })
+
     return {
       token,
+      refresh_token: refreshToken,
       user: {
         name: findUser.name,
         email: findUser.email
