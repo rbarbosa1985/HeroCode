@@ -50,9 +50,9 @@ api.interceptors.response.use((response) => response, async (error: AxiosError |
       }
     }
   } else {
-    localStorage.removeItem('token')
-    localStorage.removeItem('refresh_token')
-    localStorage.removeItem('user')
+    // localStorage.removeItem('token')
+    // localStorage.removeItem('refresh_token')
+    // localStorage.removeItem('user')
   }
 
   return Promise.reject(error);
