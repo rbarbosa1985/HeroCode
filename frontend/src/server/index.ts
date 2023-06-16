@@ -13,6 +13,8 @@ const api = axios.create({
 const refreshSubscribers: Array<(token: string) => void> = [];
 let failedRequest: Array<IRequestConfig> = []
 
+
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
 
@@ -26,9 +28,10 @@ api.interceptors.response.use((response) => response, async (error: AxiosError |
   const originalRequest = (error as AxiosError).config as IRequestConfig;
   if (error instanceof AxiosError && error.response?.status === 401) {
     if (error.response.data && error.response.data.code === 'token.expired') {
+
       try {
         const refreshToken = localStorage.getItem('refresh_token');
-        const response = await api.post('/refresh', {
+        const response = await api.post('/users/refresh', {
           refresh_token: refreshToken
         });
         const { token, refresh_token } = response.data;
@@ -48,7 +51,15 @@ api.interceptors.response.use((response) => response, async (error: AxiosError |
         });
         failedRequest = []
       }
+
     }
+    return new Promise((resolve, reject) => {
+      failedRequest.push({
+        ...originalRequest,
+        onSuccess: (response) => resolve(response),
+        onFailure: (error) => reject(error),
+      })
+    })
   } else {
     // localStorage.removeItem('token')
     // localStorage.removeItem('refresh_token')

@@ -55,7 +55,7 @@ export function Dashboard() {
       <div className={style.schedule}>
         <div className={style.cardWrapper}>
           {schedules.map((schedule, index) => {
-            return <Card key={index} date={schedule.date} name={schedule.name} id={schedule.id} />
+            return <Card key={index} date={schedule.date} name={schedule.name} id={schedule.id} phone={schedule.phone} />
           })}
         </div>
         <div className={style.picker}>

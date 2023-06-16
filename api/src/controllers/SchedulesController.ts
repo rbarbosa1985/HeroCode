@@ -35,10 +35,9 @@ class SchedulesController {
 
   async update(request: Request, response: Response, next: NextFunction) {
     const { date } = request.body;
-    const { id } = request.params
+    const { id } = request.params;
     try {
       const result = await this.scheduleService.update(id, date);
-
       return response.json(result);
     } catch (error) {
       next(error);
@@ -46,12 +45,11 @@ class SchedulesController {
   }
 
   async delete(request: Request, response: Response, next: NextFunction) {
-    const { date } = request.body;
-    const { user_id } = request;
+    const { id } = request.params;
     try {
-      const result = await this.scheduleService.delete();
+      const result = await this.scheduleService.delete(id);
 
-      return response.status(201).json(result);
+      return response.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -59,3 +57,4 @@ class SchedulesController {
 }
 
 export { SchedulesController };
+

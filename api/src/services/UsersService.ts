@@ -58,21 +58,31 @@ class UsersService {
       throw new Error('Refresh token  missing.')
     }
 
+    let secretKeyRefresh: string | undefined = process.env.ACCESS_KEY_TOKEN_REFRESH
+
+    if (!secretKeyRefresh) {
+      throw new Error('There is no token key')
+    }
+
     let secretKey: string | undefined = process.env.ACCESS_KEY_TOKEN
 
     if (!secretKey) {
       throw new Error('There is no token key')
     }
 
-    const verifyRefreshToken = verify(refresh_token, secretKey)
+    const verifyRefreshToken = await verify(refresh_token, secretKeyRefresh)
 
     const { sub } = verifyRefreshToken;
 
     const newToken = sign({ sub }, secretKey, {
-      expiresIn: 60 * 15,
+      expiresIn: '1h',
     })
 
-    return { token: newToken };
+    const refreshToken = sign({ sub }, secretKey, {
+      expiresIn: '7d',
+    })
+
+    return { token: newToken, refresh_token: refreshToken };
 
   }
 
@@ -94,12 +104,18 @@ class UsersService {
       throw new Error('There is no token key')
     }
 
+    let secretKeyRefreshToken: string | undefined = process.env.ACCESS_KEY_TOKEN_REFRESH
+
+    if (!secretKeyRefreshToken) {
+      throw new Error('There is no token key')
+    }
+
     const token = sign({ email }, secretKey, {
       subject: findUser.id,
       expiresIn: 60 * 15,
     })
 
-    const refreshToken = sign({ email }, secretKey, {
+    const refreshToken = sign({ email }, secretKeyRefreshToken, {
       subject: findUser.id,
       expiresIn: '7d',
     })
@@ -109,7 +125,8 @@ class UsersService {
       refresh_token: refreshToken,
       user: {
         name: findUser.name,
-        email: findUser.email
+        email: findUser.email,
+        avatar_url: findUser.avatar_url
       }
     }
 

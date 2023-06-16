@@ -8,7 +8,9 @@ class SchedulesService {
     this.schedulesRepository = new SchedulesRepository();
   }
 
-  async delete() {
+  async delete(id: string) {
+    const result = await this.schedulesRepository.delete(id);
+    return result
 
   }
 
@@ -61,3 +63,4 @@ class SchedulesService {
 }
 
 export { SchedulesService };
+

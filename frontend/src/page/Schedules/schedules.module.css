@@ -1,0 +1,72 @@
+.formDiv {
+  width: 50%;
+  margin: auto;
+}
+
+.date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.select {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  font-size: 1rem;
+  margin-bottom: .8rem;
+}
+
+.select label {
+  color: var(--primary);
+  margin-top: 0.2rem;
+  margin-left: 0.2rem;
+}
+
+.date select {
+  border: 1px solid var(--primary);
+  background: none;
+  color: var(--primary);
+  border-radius: 8px;
+  align-items: center;
+  height: fit-content;
+  padding: .5rem;
+  font-size: 1rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.footer>button:first-child {
+  border: 1px solid var(--secondary);
+  background: none;
+  color: var(--secondary);
+}
+
+.footer>button:first-child:hover {
+  background-color: var(--gray-50);
+  background-color: var(--white);
+}
+
+.footer>button {
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 300px;
+  border-radius: 8px;
+  padding: .5rem 1.5rem;
+  width: 40%;
+}
+
+.footer>button:nth-child(2) {
+  border: 1px solid var(--secondary);
+  background-color: var(--secondary);
+  color: var(--white);
+}
+
+.footer>button:nth-child(2):hover {
+  background-color: var(--white);
+  color: var(--secondary);
+}
