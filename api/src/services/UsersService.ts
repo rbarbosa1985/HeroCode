@@ -12,7 +12,7 @@ class UsersService {
     const findUser = await this.usersRepository.findUserByEmail(email);
 
     if (findUser) {
-      throw new Error('User exists.')
+      throw new Error('Usuário já existe.')
     }
 
     const hashPassword = await hash(password, 10);
@@ -26,12 +26,12 @@ class UsersService {
       const findUser = await this.usersRepository.findUserById(user_id);
 
       if (!findUser) {
-        throw new Error('User not found.')
+        throw new Error('Usuário não encontrado.')
       }
       const passwordMatch = compare(oldPassword, findUser.password);
 
       if (!passwordMatch) {
-        throw new Error('User or password invalid.')
+        throw new Error('Usuário ou senha invalida.')
       }
 
       const hashPassword = await hash(newPassword, 10);
@@ -90,12 +90,12 @@ class UsersService {
 
     const findUser = await this.usersRepository.findUserByEmail(email);
     if (!findUser) {
-      throw new Error('User or password invalid.')
+      throw new Error('Usuário ou senha invalida.')
     }
     const passwordMatch = await compare(password, findUser.password);
 
     if (!passwordMatch) {
-      throw new Error('User or password invalid.')
+      throw new Error('Usuário ou senha invalida.')
     }
 
     let secretKey: string | undefined = process.env.ACCESS_KEY_TOKEN

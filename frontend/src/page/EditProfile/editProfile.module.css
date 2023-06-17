@@ -1,44 +1,43 @@
-.container h2 {
-  color: var(--secondary);
+.title {
+  font-weight: 300;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  color: var(--primary);
   margin-left: 2rem;
 }
 
 .formDiv {
   width: 50%;
   margin: auto;
+  margin-top: 2rem;
 }
 
-.date {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.fileUpload {
+  width: 100%;
+  text-align: center;
+  position: relative;
 }
 
-.select {
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-  font-size: 1rem;
-  margin-bottom: .8rem;
+.fileUpload img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
 }
 
-.select label {
-  color: var(--primary);
-  margin-top: 0.2rem;
-  margin-left: 0.2rem;
+.imageUpload {
+  background-color: var(--primary);
+  padding: 10px;
+  border-radius: 50px;
+  display: inline-flex;
+  color: var(--white);
+  position: absolute;
+  bottom: 10px;
+  right: 35%;
+  cursor: pointer;
 }
 
-.date select {
-  border: 1px solid var(--primary);
-  background: none;
-  color: var(--primary);
-  border-radius: 8px;
-  align-items: center;
-  height: fit-content;
-  padding: .5rem;
-  font-size: 1rem;
+.imageUpload input[type='file'] {
+  display: none;
 }
 
 .footer {

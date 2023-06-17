@@ -13,18 +13,20 @@ interface IModal {
   name: string;
   hour: number;
   id: string;
+  data: Date;
+  schedulesUpdate: (date: Date) => void;
 }
 
-export function ModalEdit({ isOpen, handleChangeModal, hour, name, id }: IModal) {
+export function ModalEdit({ isOpen, handleChangeModal, hour, name, id, data, schedulesUpdate }: IModal) {
   const { availableSchedules, schedules, date, handleSetDate } = useAuth();
   const [hourSchedule, setHourSchedule] = useState('');
   const currentValue = new Date().toISOString().split('T')[0];
 
-  const filteredDate = availableSchedules.filter(() => {
+  const filteredDate = availableSchedules.filter((hour) => {
     const isScheduleAvailable = !schedules.find((scheduleItem) => {
       const scheduleDate = new Date(scheduleItem.date);
       const scheduleHour = getHours(scheduleDate);
-      return scheduleHour === hour;
+      return scheduleHour === Number(hour);
     });
     return isScheduleAvailable;
   })
@@ -34,18 +36,20 @@ export function ModalEdit({ isOpen, handleChangeModal, hour, name, id }: IModal)
   }
 
   const updateData = async () => {
-    const formattedDate = formatISO(setHours(parseISO(date), parseInt(hourSchedule)))
-    await api.put(`/schedules/${id}`, {
+    try {
+      const formattedDate = formatISO(setHours(parseISO(date), parseInt(hourSchedule)))
+      await api.put(`/schedules/${id}`, {
+        date: formattedDate
+      }).then(() => {
+        toast.success('Horário atualizado com sucesso!')
+        schedulesUpdate(data);
+      }).catch((error) => {
+        toast.error(error.response.data.message)
+      }).finally(() => { handleChangeModal(); })
+    } catch {
+      toast.error('Não é possível cadastrar em data anterior ou final de semana.')
+    }
 
-      date: formattedDate
-
-    }).then((response) => {
-      console.log(response.data);
-      toast.success('Horário atualizado com sucesso!')
-
-    }).catch((error) => {
-      toast.error(error.response.data)
-    }).finally(() => { handleChangeModal(); })
   }
 
   if (isOpen) {

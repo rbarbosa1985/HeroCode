@@ -80,8 +80,6 @@ export function AuthProvider({ children }: IAuthProvider) {
     }).catch((error) => {
       console.log(error)
     });
-
-    console.log("DATE: " + date);
   }, [date]);
 
 

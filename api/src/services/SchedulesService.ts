@@ -19,17 +19,17 @@ class SchedulesService {
     const hourStart = startOfHour(dateFormatted);
     const hour = getHours(hourStart)
     if (hour < 9 || hour > 19) {
-      throw new Error('Create Schedule between 9 at 19.')
+      throw new Error('Horários disponíveis somente de 9 as 19.')
     }
 
     if (isBefore(hourStart, new Date())) {
-      throw new Error('It is not allowed schedule old date!');
+      throw new Error('Não é possível agendar em dias anteriores ou finais de semana!');
     }
 
     const checkIsAvailable = await this.schedulesRepository.findSchedule(hourStart);
 
     if (checkIsAvailable) {
-      throw new Error('Schedule date is not available');
+      throw new Error('Esse horário já está ocupado.');
     }
 
     const create = await this.schedulesRepository.create({ name, phone, date: hourStart, user_id });
@@ -47,13 +47,13 @@ class SchedulesService {
     const hourStart = startOfHour(dateFormatted);
 
     if (isBefore(hourStart, new Date())) {
-      throw new Error('It is not allowed schedule old date!');
+      throw new Error('Não é possível agendar em dias anteriores ou finais de semana!');
     }
 
     const checkIsAvailable = await this.schedulesRepository.findSchedule(hourStart);
 
     if (checkIsAvailable) {
-      throw new Error('Schedule date is not available');
+      throw new Error('Esse horário já está ocupado.');
     }
 
     const result = await this.schedulesRepository.update(id, date);

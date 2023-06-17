@@ -13,7 +13,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, IInput> = ({ placeho
   return (
     <div className={style.container}>
       <label>{placeholder}</label>
-      <input type={type} {...rest} /* placeholder={placeholder}*/ ref={ref} />
+      <input type={type} {...rest} ref={ref} />
       {error && <span>{error}</span>}
     </div>
   )

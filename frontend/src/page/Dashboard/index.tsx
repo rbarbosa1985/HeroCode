@@ -35,7 +35,8 @@ export function Dashboard() {
   const handleDataChange = (date: Date) => {
     setDate(date);
   }
-  useEffect(() => {
+
+  function schedulesUpdate(date: Date) {
     api.get('/schedules', {
       params: {
         date,
@@ -43,7 +44,12 @@ export function Dashboard() {
     }).then((response) => {
       setSchedules(response.data);
     })
+  }
+
+  useEffect(() => {
+    schedulesUpdate(date);
   }, [date])
+
   return (
     <div className="container">
       <Header />
@@ -51,11 +57,13 @@ export function Dashboard() {
         <h2>Bem vindo(a), {user.name}</h2>
         <p>Esta é a sua lista de horários {isToday(date) ? <span>de hoje,</span> : <span>do</span>} dia {format(date, 'dd/MM/yyy')}</p>
       </div>
-      <h2 className={style.nextSchedules}>Próximos horários</h2>
+
       <div className={style.schedule}>
         <div className={style.cardWrapper}>
+          {schedules.length > 0 && <h2 className={style.nextSchedules}>Próximos horários</h2>}
+          {schedules.length <= 0 && <h2 className={style.nextSchedules}>Nenhum cliente agendado para esta data.</h2>}
           {schedules.map((schedule, index) => {
-            return <Card key={index} date={schedule.date} name={schedule.name} id={schedule.id} phone={schedule.phone} />
+            return <Card key={index} schedulesUpdate={schedulesUpdate} date={schedule.date} name={schedule.name} id={schedule.id} phone={schedule.phone} />
           })}
         </div>
         <div className={style.picker}>

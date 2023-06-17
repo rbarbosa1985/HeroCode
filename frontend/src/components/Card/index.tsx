@@ -12,9 +12,11 @@ interface ISchedule {
   date: Date;
   id: string;
   phone: string;
+  schedulesUpdate: (date: Date) => void;
+
 }
 
-export function Card({ name, date, id, phone }: ISchedule) {
+export function Card({ name, date, id, phone, schedulesUpdate }: ISchedule) {
   const isAfterDate = isAfter(new Date(date), new Date());
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -32,9 +34,9 @@ export function Card({ name, date, id, phone }: ISchedule) {
 
   const handleDelete = async () => {
     await api.delete(`/schedules/${id}`).
-      then((response) => {
-        console.log(response.data)
-        toast.success('Agendamento deletado com sucesso!')
+      then(() => {
+        toast.success('Agendamento deletado com sucesso!');
+        schedulesUpdate(date);
       }).
       catch(() => toast.error('Erro ao deletar o agendamento!'));
   }
@@ -51,7 +53,7 @@ export function Card({ name, date, id, phone }: ISchedule) {
           <RiDeleteBinLine size={25} color="#EB2e2e" onClick={() => { isAfterDate && handleDelete() }} />
         </div>
       </div>
-      <ModalEdit isOpen={openModal} handleChangeModal={handleChangeModal} hour={hour} name={name} id={id} />
+      <ModalEdit isOpen={openModal} data={date} schedulesUpdate={schedulesUpdate} handleChangeModal={handleChangeModal} hour={hour} name={name} id={id} />
     </>
   )
 }
