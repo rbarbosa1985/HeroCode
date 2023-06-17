@@ -8,6 +8,12 @@ class UsersService {
   constructor() {
     this.usersRepository = new UsersRepository();
   }
+
+  async index(email: string) {
+    const findUser = await this.usersRepository.findUserByEmail(email);
+    return findUser;
+  }
+
   async create({ name, email, password }: ICreate) {
     const findUser = await this.usersRepository.findUserByEmail(email);
 

@@ -2,7 +2,7 @@ import multer from "multer";
 
 const upload = multer({
   storage: multer.diskStorage({
-    destination: "uploads/",
+    destination: "../frontend/public/uploads/",
     filename: function (req, file, cb) {
       // Extração da extensão do arquivo original:
       const extensaoArquivo = file.originalname.split('.')[1];
@@ -21,3 +21,4 @@ const upload = multer({
 })
 
 export { upload };
+

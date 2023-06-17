@@ -89,6 +89,7 @@ export function AuthProvider({ children }: IAuthProvider) {
         email,
         password
       });
+
       const { token, refresh_token } = data;
       const userData = {
         name: data.user.name,

@@ -7,12 +7,15 @@ class UsersController {
   constructor() {
     this.usersService = new UsersService();
   }
-  index() {
-    //buscar todos
-  }
+  async me(request: Request, response: Response, next: NextFunction) {
+    const { email } = request.params;
+    try {
+      const result = await this.usersService.index(email);
 
-  show() {
-
+      return response.json(result);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async store(request: Request, response: Response, next: NextFunction) {
@@ -64,3 +67,4 @@ class UsersController {
 }
 
 export { UsersController };
+

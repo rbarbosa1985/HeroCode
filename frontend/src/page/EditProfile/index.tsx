@@ -28,7 +28,16 @@ interface IData {
   email: string;
 }
 
+interface IData2 {
+  oldPassword?: string;
+  newPassword?: string;
+  name: string;
+  avatar_url?: string;
+  email: string;
+}
+
 export function EditProfile() {
+  const [userProfile, setUserProfile] = useState<IData2>();
   const [fileUpload, setFileUpload] = useState(imageDefault);
   const schema = yup.object().shape({
     name: yup.string().required('O nome é obrigatório.'),
@@ -42,15 +51,27 @@ export function EditProfile() {
     resolver: yupResolver(schema)
   });
 
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const userStorage = localStorage.getItem('user');
     const user = userStorage && JSON.parse(userStorage);
-    setValue('name', user.name);
-    setValue('email', user.email);
-    setValue('picture', user.avatar_url);
-    console.log(user);
+    async function Profile() {
+      const result = await api.get(`/users/${user.email}`);
+      setUserProfile(result);
+      if (userProfile) {
+        if (userProfile?.avatar_url) {
+          setFileUpload("../../../public/uploads/" + userProfile.avatar_url.split('\\')[4]);
+        }
+
+        setValue('name', userProfile.name);
+        setValue('email', userProfile.email);
+      }
+    }
+
+    Profile();
+
   }, [])
 
   const handleImage = (files: File[]) => {
@@ -78,6 +99,7 @@ export function EditProfile() {
       }
     }).then(() => {
       toast.success('Usuário alterado com sucesso!');
+
       navigate("/dashboard");
     }).catch((error) => {
       toast.error(error.response.data.message)
