@@ -21,6 +21,7 @@ export function Dashboard() {
   const [date, setDate] = useState(new Date());
   const [schedules, setSchedules] = useState<Array<ISchedule>>([]);
   const { user } = useAuth();
+  const currentValue = new Date().toISOString().split('T')[0];
 
   const isWeekend = (date: Date) => {
     const day = date.getDay();
@@ -78,6 +79,7 @@ export function Dashboard() {
             onDayClick={handleDataChange}
             locale={ptBR}
             fromMonth={new Date()}
+          // fromDate={new Date()}
           />
         </div>
       </div>

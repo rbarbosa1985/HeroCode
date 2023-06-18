@@ -25,11 +25,9 @@ export function Schedules() {
     hour: yup.string().required('A Hora é obrigatório.'),
   });
   const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({ resolver: yupResolver(schema) });
-
   const { availableSchedules, schedules, handleSetDate } = useAuth();
-  const currentValue = new Date().toISOString().split('T')[0];
   const navigate = useNavigate();
-
+  const currentValue = new Date().toISOString().split('T')[0];
   const filteredDate = availableSchedules.filter((hour) => {
     const isScheduleAvailable = !schedules.find((scheduleItem) => {
       const scheduleDate = new Date(scheduleItem.date);

@@ -28,16 +28,7 @@ interface IData {
   email: string;
 }
 
-interface IData2 {
-  oldPassword?: string;
-  newPassword?: string;
-  name: string;
-  avatar_url?: string;
-  email: string;
-}
-
 export function EditProfile() {
-  const [userProfile, setUserProfile] = useState<IData2>();
   const [fileUpload, setFileUpload] = useState(imageDefault);
   const schema = yup.object().shape({
     name: yup.string().required('O nome é obrigatório.'),
@@ -45,33 +36,30 @@ export function EditProfile() {
     oldPassword: yup.string(),
     newPassword: yup.string(),
     newPasswordConfirm: yup.string().oneOf([yup.ref('newPassword')], 'senha devem ser iguais'),
-
+    picture: yup.mixed()
   });
-  const { register, handleSubmit, setValue } = useForm<IFormValues>({
-    resolver: yupResolver(schema)
-  });
-
+  const { register, handleSubmit, setValue } = useForm<IFormValues>({ resolver: yupResolver(schema) });
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const userStorage = localStorage.getItem('user');
     const user = userStorage && JSON.parse(userStorage);
-    async function Profile() {
-      const result = await api.get(`/users/${user.email}`);
-      setUserProfile(result);
-      if (userProfile) {
-        if (userProfile?.avatar_url) {
-          setFileUpload("../../../public/uploads/" + userProfile.avatar_url.split('\\')[4]);
-        }
 
-        setValue('name', userProfile.name);
-        setValue('email', userProfile.email);
+    const result = async () => {
+      const data = await api.post(`/users/me`, {
+        email: user.email
+      });
+      console.log(data);
+      if (data.data) {
+        if (data.data.avatar_url) {
+          setFileUpload("../../../public/uploads/" + data.data.avatar_url.split('\\')[4]);
+        }
+        setValue('name', data.data.name);
+        setValue('email', data.data.email);
       }
     }
-
-    Profile();
-
+    result();
   }, [])
 
   const handleImage = (files: File[]) => {

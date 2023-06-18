@@ -8,7 +8,7 @@ class UsersController {
     this.usersService = new UsersService();
   }
   async me(request: Request, response: Response, next: NextFunction) {
-    const { email } = request.params;
+    const { email } = request.body;
     try {
       const result = await this.usersService.index(email);
 

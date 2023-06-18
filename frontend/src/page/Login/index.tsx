@@ -48,7 +48,7 @@ export function Login() {
             <form onSubmit={submit}>
               <Input type='text' placeholder="Email" icon={<AiOutlineMail size={20} />} {...register('email', { required: true })} error={errors.email && errors.email.message} />
               <Input type='password' placeholder="Senha" icon={<BsKey size={20} />} {...register('password', { required: true })} error={errors.password && errors.password.message} />
-              <Button text='Cadastrar' />
+              <Button text='Entrar' />
             </form>
             <div className={style.register}>
               <span>Ainda não tem conta? <Link to={'/register'}>Cadastre-se</Link></span>
